@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/jquery-dataTables.min.css"/>
+    <script src="scripts/jquery-3.3.1.min.js"></script>
+    <script src="scripts/jquery.dataTables.min.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+  </head>
+  <body>
+  	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="#">Tournament Table</a>
+		<ul class="navbar-nav mr-auto">
+			<li class="nav-item">
+				<a class="nav-link" href="index.html">Map</a>
+			</li>
+			<li class="nav-item active">
+				<a class="nav-link" href="#">Table</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="addTournament.html">Edit Tourny</a>
+			</li>
+			<li class="nav-item">
+                <a class="nav-link" href="editHostSchools.html">Edit Hosts</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="swapSchools.html">Swap Schools</a>
+			</li>
+		</ul>
+	  	<div class="btn-group">
+		  <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		    Table Structure
+		  </button>
+		  <div class="dropdown-menu dropdown-menu-right">
+			<button class="dropdown-item" type="button" onclick="changeTableSchools();">Schools</button>
+		    <button class="dropdown-item" type="button" onclick="changeTableSectionals();">Sectionals</button>
+		    <button class="dropdown-item" type="button" onclick="changeTableRegionals();">Regionals</button>
+		    <button class="dropdown-item" type="button" onclick="changeTableSemiStates();">Semi-States</button>
+		    <button class="dropdown-item" type="button" onclick="changeTableStates();">States</button>
+		  </div>
+		</div>
+	</nav>
+	<style>
+		td.details-control {
+		    background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+		    cursor: pointer;
+		    max-width:25px !important;
+		}
+		tr.shown td.details-control {
+		    background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center;
+		    max-width:25px !important;
+		}
+	</style>
+    <script>
+		try{
+		//Global variable that toggles table settings
+    	var isSchoolsList = true;	
+    	
+    	//Gets a list of the schools from Java then formats for the table
+    	//Also sets global isSchoolsList to true	
+		function changeTableSchools(){
+			isSchoolsList = true;		
+			var schools = SchoolService.getAllSchools();
+			var arr = [];
+			for(var i=0, ii=schools.size(); i<ii; i++){
+				arr.push(schools.get(i));
+				arr[i].FeederSchools = ["None"];
+			}
+			buildTable(arr);
+		}
+
+		//Gets a list of the State Tourny from Java then formats for the table
+    	//Also sets global isSchoolsList to false
+		function changeTableStates(){
+			isSchoolsList = false;		
+
+			var state = SchoolService.getStates();
+			var obj = {
+				schoolName: state.get(0).tournamentName, 
+				FeederSchools: []
+			};
+			for(var i=0, ii= state.size(); i<ii; i++){
+				obj.FeederSchools.push(state.get(i).schoolName)
+			}
+			var array = [obj];
+			buildTable(array);
+		}
+		
+		//Gets a list of the SemiStates from Java then formats for the table
+    	//Also sets global isSchoolsList to false
+		function changeTableSemiStates(){
+			isSchoolsList = false;
+			var semistate = SchoolService.getSemiStates();
+			var arr = [];
+			for(var i=0; i<semistate.size(); i++){
+				var obj = {schoolName: semistate.get(i).tournamentName, FeederSchools: []};
+				if(notInArray(obj, arr)){
+					arr.push(obj);
+				}
+			}
+			for(var j=0, jj=arr.length; j<jj; j++){
+				for(var k=0, kk=semistate.size(); k<kk; k++){
+					if(arr[j].schoolName === semistate.get(k).tournamentName){
+						arr[j].FeederSchools.push(semistate.get(k).schoolName)
+					}
+				}
+			}
+			buildTable(arr);
+		}
+		
+		
+		//Gets a list of the Regionals from Java then formats for the table
+    	//Also sets global isSchoolsList to false
+		function changeTableRegionals(){
+			isSchoolsList = false;
+
+			var regionals = SchoolService.getRegionals();
+			var arr = [];
+			for(var i=0; i<regionals.size(); i++){
+				var obj = {schoolName: regionals.get(i).tournamentName, FeederSchools: []};
+				if(notInArray(obj, arr)){
+					arr.push(obj);
+				}
+			}
+			for(var j=0, jj=arr.length; j<jj; j++){
+				for(var k=0, kk=regionals.size(); k<kk; k++){
+					if(arr[j].schoolName === regionals.get(k).tournamentName){
+						arr[j].FeederSchools.push(regionals.get(k).schoolName)
+					}
+				}
+			}
+			buildTable(arr);
+		}
+		
+		//Gets a list of the Sectionals from Java then formats for the table
+    	//Also sets global isSchoolsList to false
+		function changeTableSectionals(){
+			isSchoolsList = false;
+			var sectionals = SchoolService.getSectionals();
+			var arr = [];
+			for(var i=0; i<sectionals.size(); i++){
+				var obj = {schoolName: sectionals.get(i).tournamentName, FeederSchools: []};
+				if(notInArray(obj, arr)){
+					arr.push(obj);
+				}
+			}
+			for(var j=0, jj=arr.length; j<jj; j++){
+				for(var k=0, kk=sectionals.size(); k<kk; k++){
+					if(arr[j].schoolName === sectionals.get(k).tournamentName){
+						arr[j].FeederSchools.push(sectionals.get(k).schoolName)
+					}
+				}
+			}
+			buildTable(arr);
+		}
+	
+		function notInArray(obj, arr){
+			for(var i=0; i<arr.length; i++){
+				if(arr[i].schoolName === obj.schoolName){
+					return false;
+				}
+			}
+			return true;
+		}
+
+		function format ( d ) {
+		    // `d` is the original data object for the row
+		    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+		        '<tr>'+
+		            '<td>Feeder Schools:</td>'+
+		            '<td>'+d.FeederSchools+'</td>'+
+		        '</tr>'+
+		    '</table>';
+		}
+      	
+      	function buildTable(array){
+	      	try{   
+				  var table = $('#example').DataTable( {
+					"data": array,
+					"destroy": true,
+					"columns": [
+						{
+							"className":      'details-control',
+							"orderable":      false,
+							"visible": !isSchoolsList,
+							"data":           null,
+							"defaultContent": ''
+						},
+						{"data": "schoolName"},
+						{"data": "address", visible: isSchoolsList},
+						{"data": "enrollmentAmount", visible: isSchoolsList},
+						{"data": "averageDistance", visible: isSchoolsList},
+						{"data": "maxDistance", visible: isSchoolsList},
+						{"data": "FeederSchools", visible: false}
+					],
+					"order": [[1, 'asc']]
+				});
+				
+				// Add event listener for opening and closing details
+				$('#example tbody').on('click', 'td.details-control', function () {
+					var tr = $(this).closest('tr');
+					var row = table.row( tr );
+			
+					if ( row.child.isShown() ) {
+						// This row is already open - close it
+						row.child.hide();
+						tr.removeClass('shown');
+					}
+					else {
+						// Open this row
+						row.child( format(row.data()) ).show();
+						tr.addClass('shown');
+					}
+				} );
+			}
+			catch(ex){
+				Bridge.print(ex);
+			}
+		}
+      	
+		//ON START
+      	setTimeout(function(){ 	
+	      	changeTableSchools();
+		 }, 1000);
+
+		}
+		catch(ex){
+			Bridge.print(ex);
+		}
+
+	</script>
+    <div style="margin:20px;" id="tableDiv">
+      <table id="example" class="display" style="width:100%;">
+          <thead>
+              <tr>
+  				  <th style="max-width:25px;"></th>
+                  <th>Name</th>
+				  <th>Address</th>
+				  <th>Enrollment Amount</th>
+				  <th>Average Distance</th>
+				  <th>Max Distance</th>
+				  <th>Feeder Schools</th>
+              </tr>
+          </thead>
+          <tbody id="tableBody">
+            	
+          </tbody>
+          <tfoot>
+              <tr>
+              	  <th style="max-width:25px;"></th>
+                  <th>Name</th>
+				  <th>Address</th>
+				  <th>Enrollment Amount</th>
+				  <th>Average Distance</th>
+				  <th>Max Distance</th>
+				  <th>Feeder Schools</th>
+              </tr>
+          </tfoot>
+      </table>
+      </div>
+  </body>
+</html>

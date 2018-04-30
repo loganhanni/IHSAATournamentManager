@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Dank Map</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <script src="scripts/jquery-3.3.1.min.js"></script>
+        <script src="scripts/popper.min.js"></script>
+        <script src="scripts/bootstrap.bundle.min.js"></script>
+        <script src="scripts/swapSchools.js"></script>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	        <a class="navbar-brand" href="#">Edit Tourny</a>
+	        <ul class="navbar-nav mr-auto">
+	            <li class="nav-item">
+	                <a class="nav-link" href="index.html">Map</a>
+	            </li>
+	            <li class="nav-item">
+	                <a class="nav-link" href="tournamentTable.html">Table</a>
+	            </li>
+	            <li class="nav-item">
+	                <a class="nav-link" href="addTournament.html">Edit Tourny</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="editHostSchools.html">Edit Hosts</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Swap Schools</a>
+                </li>
+	        </ul>
+        </nav>
+        <div class="form-group m-3">
+            <label for="inputTournamentSelect">Select Tournament</label>
+            <select class="custom-select" id="inputTournamentSelect">
+                <option selected value="">Select...</option>
+            </select>
+            <small id="tournamentSelect" class="form-text text-muted">This tournament's sectionals will be edited.</small>
+        </div>
+        <div class="form-group m-3">
+            <label for="inputSectionalSelect">Select Sectional</label>
+            <select class="custom-select" id="inputSectionalSelect" size="5">
+                <option selected value="">Select...</option>
+            </select>
+        </div>
+        <div class="form-group m-3">
+            <label for="inputSchoolSelect">Select School to Transfer</label>
+            <select class="custom-select" id="inputSchoolSelect" size="5">
+                <option selected value="">Select...</option>
+            </select>
+        </div>
+        <div class="col-6 mt-3">
+                <button type="button" id="transferSchoolButton" class="btn btn-primary" onclick="transferSchool()">Transfer School</button>
+            </div>
+    </body>
+</html>

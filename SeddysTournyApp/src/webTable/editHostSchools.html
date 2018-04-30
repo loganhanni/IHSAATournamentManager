@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Dank Map</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <script src="scripts/jquery-3.3.1.min.js"></script>
+        <script src="scripts/popper.min.js"></script>
+        <script src="scripts/bootstrap.bundle.min.js"></script>
+        <script src="scripts/editHostSchools.js"></script>
+    </head>
+    <body>
+        <!--DIALOG START-->
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Replace Host School</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Please select a Host School to replace the Host School you are removing.</p>
+                    </div>
+                    <div class="input-group col-12 mt-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">Replacement Host</label>
+                        </div>
+                        <select class="custom-select" id="replaceHostList" size="5">
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" id="acceptReplaceButton" onclick="replaceTournament()">Accept</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--DIALOG END-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	        <a class="navbar-brand" href="#">Edit Hosts</a>
+	        <ul class="navbar-nav mr-auto">
+	            <li class="nav-item">
+	                <a class="nav-link" href="index.html">Map</a>
+	            </li>
+	            <li class="nav-item">
+	                <a class="nav-link" href="tournamentTable.html">Table</a>
+	            </li>
+	            <li class="nav-item">
+	                <a class="nav-link" href="addTournament.html">Edit Tourny</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Edit Hosts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="swapSchools.html">Swap Schools</a>
+                </li>
+	        </ul>
+        </nav>
+        <div class="form-group m-3">
+            <label for="inputTournamentSelect">Base Tournament</label>
+            <select class="custom-select" id="inputTournamentSelect">
+                <option selected value="">Select...</option>
+            </select>
+            <small id="tournamentSelect" class="form-text text-muted">This tournament's host schools will be edited.</small>
+        </div>
+        <hr class="my-4">
+        <div class="col-12">
+            <div class="input-group col-6 mt-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">Select New Host</label>
+                </div>
+                <select class="custom-select" id="newHostList" size="5">
+                </select>
+            </div>
+            <div class="col-6 mt-3">
+                <button type="button" id="addHostButton" class="btn btn-primary" onclick="saveNewHost()">Add Host</button>
+            </div>
+        </div>
+        <hr class="my-4">
+        <div class="col-12">
+            <div class="input-group col-6 mt-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">Remove Host</label>
+                </div>
+                <select class="custom-select" id="removeHostList" size="5">
+                </select>
+            </div>
+            <div class="col-6 mt-3">
+                <button type="button" id="removeHostButton" class="btn btn-primary" onclick="removeHost()">Remove Host</button>
+            </div>
+        </div>
+    </body>
+</html>

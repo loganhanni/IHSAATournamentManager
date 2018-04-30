@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Dank Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="scripts/jquery-3.3.1.min.js"></script>
+    <script src="scripts/popper.min.js"></script>
+    <script src="scripts/bootstrap.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBKsVszJkcmEHlIvfj3te06JOkQjAjZBdg"></script>
+    <script src="scripts/Gmaps.js"></script>
+    <script src="scripts/mapPopulate.js"></script>
+    <script>
+     $(document).ready(function(){
+        var map = new GMaps({
+            div: '#map',
+            lat: 40.2672,
+            lng: -86.1349,
+            zoom: 7.5,
+            streetViewControl: false,
+            fullscreenControl: false
+        });
+
+        var mapPopulate = new MapPopulate(map);
+    
+        $('#structureList').prop('disabled', 'disabled');
+        $('#hostSchoolList').prop('disabled', 'disabled');
+        $('#travelDistances').hide();
+        
+        $("#tournamentList").change(function() {
+            mapPopulate.setSelectedTournament($(this).val());
+            if(mapPopulate.getSelectedTournament()){
+                $('#structureList').prop('disabled', false);
+            }
+            else{
+                $('#structureList').val(null);
+                $('#structureList').prop('disabled', 'disabled');
+                $('#hostSchoolList').val(null);
+                $('#hostSchoolList').prop('disabled', 'disabled');
+            }
+        });
+        
+        $("#structureList").change(function() {
+            mapPopulate.setSelectedStructure($(this).val());
+            if(mapPopulate.getSelectedStructure()){
+                $('#hostSchoolList').prop('disabled', false);
+                if(mapPopulate.getSelectedStructure() === "States"){
+                    mapPopulate.populateStatesSchoolList();
+                }
+                else if(mapPopulate.getSelectedStructure() === "SemiStates"){
+                    mapPopulate.populateSemiStatesSchoolList();
+                }
+                else if(mapPopulate.getSelectedStructure() === "Regionals"){
+                    mapPopulate.populateRegionalsSchoolList();
+                }
+                else if(mapPopulate.getSelectedStructure() === "Sectionals"){
+                    mapPopulate.populateSectionalsSchoolList();
+                }
+                else{
+                    mapPopulate.populateSchoolList();
+                }
+            }
+            else{
+                $('#hostSchoolList').val(null);
+                $('#hostSchoolList').prop('disabled', 'disabled');
+            }
+        });
+        
+        $("#hostSchoolList").change(function() {
+            mapPopulate.setSelectedHostSchool($(this).val());
+            if(mapPopulate.getSelectedHostSchool()){
+                mapPopulate.clearMap();
+                if(mapPopulate.getSelectedStructure() === "States"){
+                    mapPopulate.updateMapStates(mapPopulate.getSelectedHostSchool());
+                }
+                else if(mapPopulate.getSelectedStructure() === "SemiStates"){
+                    mapPopulate.updateMapSemiStates(mapPopulate.getSelectedHostSchool());
+                }
+                else if(mapPopulate.getSelectedStructure() === "Regionals"){
+                    mapPopulate.updateMapRegionals(mapPopulate.getSelectedHostSchool());
+                }
+                else if(mapPopulate.getSelectedStructure() === "Sectionals"){
+                    mapPopulate.updateMapSectionals(mapPopulate.getSelectedHostSchool());
+                }
+                else{
+                    mapPopulate.updateMapSchools(mapPopulate.getSelectedHostSchool());
+                }
+            }
+            else{
+                $('#hostSchoolList').val(null);
+            }
+        });
+        mapPopulate.getTournaments();
+    });   
+    </script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Map View</a>
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Map</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="tournamentTable.html">Table</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="addTournament.html">Edit Tourny</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="editHostSchools.html">Edit Hosts</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="swapSchools.html">Swap Schools</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="row" style="margin-right:0px;">
+        <div class="col-md-6" id="map" style="width:475px; height:880px;"></div>
+        <div class="col-md-6" style="padding:0px;">
+			<nav class="navbar navbar-light bg-light">
+			  <span class="navbar-brand mb-0 h1">Map Settings</span>
+            </nav>
+            <div class="input-group col-10 mt-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">Tournament</label>
+                </div>
+                <select class="custom-select" id="tournamentList">
+                    <!--Populated in JavaScript-->
+                </select>
+            </div>
+            <div class="input-group col-10 mt-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">Tournament Structure</label>
+                </div>
+                <select class="custom-select" id="structureList">
+                    <option selected value="">Select...</option>
+                    <option value="Schools">Schools</option>
+                    <option value="Sectionals">Sectionals</option>
+                    <option value="Regionals">Regionals</option>
+                    <option value="SemiStates">SemiStates</option>
+                    <option value="States">State</option>
+                </select>
+            </div>
+            <div class="input-group col-10 mt-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">Host School</label>
+                </div>
+                <select class="custom-select" id="hostSchoolList" size="10">
+                </select>
+            </div>
+            <div class="jumbotron jumbotron-fluid col-md-10 m-3" id="travelDistances">
+                <div class="container">
+                  <h1 class="display-4">Travel Distances</h1>
+                  <p class="lead">Max Tournament Travel Distance: <span id="max"></span></p>
+                  <p class="lead">Average Tournament Travel Distance: <span id="average"></span></p>
+                </div>
+              </div>
+		</div>
+    </div>   
+</body>
+</html>

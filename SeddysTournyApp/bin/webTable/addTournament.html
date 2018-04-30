@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Dank Map</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <script src="scripts/jquery-3.3.1.min.js"></script>
+        <script src="scripts/popper.min.js"></script>
+        <script src="scripts/bootstrap.bundle.min.js"></script>
+        <script src="scripts/addTounament.js"></script>
+    </head>
+    <body>
+        <!--DIALOG START-->
+        <div id="myModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete Tournament</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete a tournament, this operation is permanent.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" id="acceptReplaceButton" onclick="deleteTournament()">Delete</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--DIALOG END-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	        <a class="navbar-brand" href="#">Edit Tourny</a>
+	        <ul class="navbar-nav mr-auto">
+	            <li class="nav-item">
+	                <a class="nav-link" href="index.html">Map</a>
+	            </li>
+	            <li class="nav-item">
+	                <a class="nav-link" href="tournamentTable.html">Table</a>
+	            </li>
+	            <li class="nav-item active">
+	                <a class="nav-link" href="#">Edit Tourny</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="editHostSchools.html">Edit Hosts</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="swapSchools.html">Swap Schools</a>
+                </li>
+	        </ul>
+        </nav>
+        <div class="row">
+            <div class="form-group m-3 row">
+                <label for="inputTournamentSelect">Selected Tournament</label>
+                <select class="custom-select" id="inputTournamentSelect">
+                    <option selected value="">Select...</option>
+                </select>
+            </div>
+            <div class="row m-3">
+               <button class="btn btn-danger" id="deleteTournyButton" onclick="beginDeleteTournament()">Delete Selected Tournament</button> 
+            </div>
+        </div>
+        <hr class="my-4">
+        <h4 class="ml-3">Copy Tournament</h4>
+        <form class="m-3" class="col-md-12">
+            <div class="form-group">
+                <label for="inputTournamentName">Tournament Name</label>
+                <input required type="text" class="form-control" id="inputTournamentName" placeholder="Enter Tournament Name">
+                <small id="emailHelp" class="form-text text-muted">This is your new tournament name.</small>
+            </div>
+            <div class="row">
+                <button id="submit" onclick="saveTournament()" class="btn btn-primary m-1">Save</button>
+            </div>
+        </form>
+        <hr class="my-4">
+        <h4 class="ml-3">Edit Tournament Hosts</h4>
+        <form class="m-3" class="col-md-12">
+            <div class="input-group col-10 mt-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">Tournament Structure</label>
+                </div>
+                <select class="custom-select" id="structureList">
+                    <option selected value="">Select...</option>
+                    <option value="Sectionals">Sectionals</option>
+                    <option value="Regionals">Regionals</option>
+                    <option value="SemiStates">SemiStates</option>
+                </select>
+            </div>
+            <div class="input-group col-10 mt-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="inputGroupSelect01">Original Host</label>
+                </div>
+                <select class="custom-select" id="hostSchoolList" size="5">
+                </select>
+            </div>
+            <div class="input-group col-10 mt-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text" for="replacementSchoolList">Replacement Host School</label>
+                </div>
+                <select class="custom-select" id="replacementSchoolList" size="5">
+                </select>
+            </div>
+            <div class="row">
+                <button id="swapTournamentButton" onclick="saveReplacementHost()" class="btn btn-primary m-1">Save</button>
+            </div>
+        </form>
+    </body>
+</html>
